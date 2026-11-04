@@ -75,3 +75,45 @@ revisión; después entra como `docente.demo` (o como administrador), revísala 
 
 > **Importante:** borra estos usuarios (en `/admin/users/`, como administrador) o cambia su contraseña
 > antes de publicar el blog en internet. Contraseñas conocidas en un servidor público son un riesgo.
+
+## Cómo he desplegado el proyecto
+
+### Comandos utilizados
+
+    sudo apt update
+    sudo apt install git openssh-client php-cli php-sqlite3 php-xml php-mbstring php-intl php-curl unzip composer
+    git --version
+    php -v
+    composer --version
+    php -m | grep -i sqlite
+    git config --global user.name "elena-munoz"
+    git config --global user.email "munozplataelena@gmail.com"
+    git config --global init.defaultBranch master
+    ssh-keygen -t ed25519 -C "munozplataelea@gmail.com"
+    ssh -T git@github.com
+    git clone git@github.com:munozplataelena-maker/elena-munoz.git
+    cd elena-munoz
+    composer install
+    php bin/console create-schema
+    php bin/console app:create-user admin "Administrador"
+    php -S localhost:8000 -t public
+    git remote add upstream https://github.com/mpgprofe/miniblog.git
+    git fetch upstream
+    git merge upstream/master
+    git switch -c add-license
+    git add LICENSE
+    git commit -m "Archivo de licencia de uso"
+    git push --set-upstream origin add-license
+    git mv LICESE LICENSE
+    git commit -m "Fix: Nombre de archivo LICENSE"
+    git push
+    git switch master
+    git pull origin master
+    git branch -d add-license
+    git fetch --prune
+
+### Problemas que me han surgido
+
+- GitHub rechazó mi contraseña al hacer `git push` por HTTPS. Lo solucioné usando una clave SSH.
+- `create-schema` dio el error "duplicate column name" porque la base de datos ya existía.
+
